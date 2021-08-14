@@ -37,7 +37,6 @@ public class KakaoOAuth2UserService implements OAuth2UserService<OAuth2UserReque
         // OAuth2 로그인 진행 시 키가 되는 필드 값 (PK)
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
-
         // OAuth2UserService
         OAuthAttributes attributes = OAuthAttributes.ofKakao(userNameAttributeName, oAuth2User.getAttributes());
 
