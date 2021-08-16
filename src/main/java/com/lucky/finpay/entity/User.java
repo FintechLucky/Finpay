@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "oAuth2Id", "email", "nickname", "introduction", "role"})
 public class User {
@@ -23,6 +23,9 @@ public class User {
 
     @Column
     private String profileImgUrl;
+
+    @Column
+    private String payLink;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)

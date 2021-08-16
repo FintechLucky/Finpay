@@ -26,6 +26,7 @@ public class OAuthAttributes {
     }
 
     public static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+        System.out.println(attributes);
         // Kakao는 kakao_account 에 유저정보가 있다. eamil
         Map<String, Object> kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
 

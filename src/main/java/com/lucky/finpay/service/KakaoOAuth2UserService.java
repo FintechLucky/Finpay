@@ -56,4 +56,20 @@ public class KakaoOAuth2UserService implements OAuth2UserService<OAuth2UserReque
                 .orElse(attributes.toEntity());
         return userRepository.save(user);
     }
+
+    // payLinke check 서비스 로직
+    public boolean chkPayLink(String userEmail) {
+        User user = userRepository.findByEmail(userEmail).get();
+        if (user.getPayLink() == null) {
+            return false;
+        }
+        return true;
+    }
+
+    // payLink Update 서비스 로직
+    public User updatePayLink(String payLink, String userEmail) {
+        User user = userRepository.findByEmail(userEmail).get();
+        user.setPayLink(payLink);
+        return userRepository.save(user);
+    }
 }

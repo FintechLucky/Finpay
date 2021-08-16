@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <csrf disabled="true" />
+    <meta charset="UTF-8">
+    <title>qrCodeForm</title>
+    <script src="http://code.jquery.com/jquery-3.5.1.min.js" ></script>
+    <script>
+        var result = "";
+
+        $(function (){
+            $('#uploadBtn').on('click', function (){
+                uploadFile();
+            });
+        });
+
+        async function uploadFile() {
+            var form = $('#uploadForm')[0];
+            var formData = new FormData(form);
+            await $.ajax({
+                url : 'https://api.qrserver.com/v1/read-qr-code/',
+                type : 'POST',
+                data : formData,
+                contentType : false,
+                processData : false,
+                success: function (data) {
+                    result = data[0]["symbol"][0]["data"];
+                    alert(result);
+                    var form = document.createElement("form");
+                    form.action = '/user/qrCode?payLink=' + result;
+                    form.method = "post";
+                    document.body.appendChild(form);
+                    form.submit();
+                    },
+                error: function (data) {
+                    alert(data); },
+        })
+
+
+        }
+
+
+    </script>
+</head>
+<body>
+<form id="uploadForm" action="https://api.qrserver.com/v1/read-qr-code/">
+    Choose QR code image to read/scan: <input name="file" type="file" />
+    <button type="button" id="uploadBtn">"Read QR code" </button>
+</form>
+</body>
+</html>
