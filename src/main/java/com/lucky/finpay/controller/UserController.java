@@ -2,10 +2,13 @@ package com.lucky.finpay.controller;
 
 import com.google.gson.Gson;
 import com.lucky.finpay.dto.SessionUser;
+import com.lucky.finpay.entity.User;
+import com.lucky.finpay.service.KakaoOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -13,13 +16,14 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
+    private final KakaoOAuth2UserService kakaoOAuth2UserService;
+
     private final HttpSession httpSession;
     Gson gson = new Gson();
 
@@ -34,8 +38,6 @@ public class UserController {
 
     @GetMapping("/user/list")
     public String friend_list() {
-
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
         String auth = authorizationUri;
         auth += "?client_id=" + clientId;
@@ -83,7 +85,7 @@ public class UserController {
         // 결과 json parsing 처리
         Map map = gson.fromJson(result, Map.class);
 
-        return "redirect:/user/friends?access_token="+map.get("access_token");
+        return "redirect:/user/friends?access_token=" + map.get("access_token");
     }
 
     @GetMapping("/user/friends")
@@ -96,7 +98,7 @@ public class UserController {
         try {
             URL friends = new URL(friendsUrl);
             HttpURLConnection con2 = (HttpURLConnection) friends.openConnection();
-            con2.setRequestProperty("Authorization", "Bearer "+access_token);
+            con2.setRequestProperty("Authorization", "Bearer " + access_token);
             con2.setRequestMethod("GET");
 
             StringBuilder sb = new StringBuilder();
@@ -124,5 +126,17 @@ public class UserController {
         // Map map = gson.fromJson(result, Map.class);
 
         return result;
+    }
+
+    @GetMapping("/user/qrCode")
+    public String qrCode() {
+        return "/user/qrCodeForm";
+    }
+
+    @PostMapping("/user/qrCode")
+    @ResponseBody
+    public User qrCode(@RequestParam String payLink) {
+        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+        return kakaoOAuth2UserService.updatePayLink(payLink, sessionUser.getEmail());
     }
 }

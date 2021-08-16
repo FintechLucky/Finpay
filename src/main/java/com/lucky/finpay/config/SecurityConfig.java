@@ -21,14 +21,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                     .antMatchers("/user/**").hasRole("USER")
-                    .antMatchers("/**").permitAll()
+                    .antMatchers("/**", "/static/css/**").permitAll()
                 .and()
                     .logout()
                         .logoutUrl("/user/logout.do")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                 .and()
-                    .oauth2Login().userInfoEndpoint().userService(kakaoOAuth2UserService);
+                    .oauth2Login()
+                        .userInfoEndpoint().userService(kakaoOAuth2UserService)
+                    .and()
+                        .loginPage("/login");
+
+        http.csrf().disable();
     }
 
 }
