@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<csrf disabled="true" />
+	<meta charset="UTF-8">
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="/css/qrCodeForm.css" />
+	<title>QrCodeForm</title>
+	<script src="http://code.jquery.com/jquery-3.5.1.min.js" ></script>
+	<script>
+        var result = "";
+
+        $(function (){
+            $('#uploadBtn').on('click', function (){
+                uploadFile();
+            });
+        });
+
+        async function uploadFile() {
+            var form = $('#uploadForm')[0];
+            var formData = new FormData(form);
+            await $.ajax({
+                url : 'https://api.qrserver.com/v1/read-qr-code/',
+                type : 'POST',
+                data : formData,
+                contentType : false,
+                processData : false,
+                success: function (data) {
+					console.log(data);
+                    result = data[0]["symbol"][0]["data"];
+                    var form = document.createElement("form");
+                    form.action = '/user/qrCode?payLink=' + result;
+                    form.method = "post";
+                    document.body.appendChild(form);
+                    form.submit();
+                    },
+                error: function (data) {
+                    alert(data); },
+        })
+
+
+        }
+
+
+    </script>
+</head>
+<body>
+	<div class="v13_24">
+		<form id="uploadForm" action="https://api.qrserver.com/v1/read-qr-code/" class="v34_24">
+			<button type="button" id="uploadBtn" class="v13_32">
+				<div class="v13_33"></div>
+				<span class="v13_34">송금 QR 이미지 등록</span>
+				<div class="v33_21"></div>
+			</button>
+			<label for="file" class="v33_14">
+				<div class="v33_15"></div>
+				<span class="v33_16">사진 불러오기</span>
+				<div class="v33_20"></div>
+			</label>
+			<input type="file" id="file" name="file">
+		</form>
+		<div class="v13_53">
+			<div class="v13_54"></div>
+			<span class="v13_55">송금 QR 이미지 다운로드 방법</span>
+		</div>
+		<div class="v26_20"></div>
+		<span class="v13_43">F i n     P a y</span>
+		<span class="v13_44">쉬 운  정 산,  빠 른  송 금</span>
+		<span class="v13_48">송금 요청을 위한 카카오톡 송금 QR 코드
+ 이미지를 등록해주세요</span>
+</div>
+</body>
+</html>
