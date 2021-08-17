@@ -41,7 +41,7 @@ public class UserController {
 
         String auth = authorizationUri;
         auth += "?client_id=" + clientId;
-        auth += "&redirect_uri=" + "http://15.165.237.166:8080/auth";
+        auth += "&redirect_uri=" + "http://221.168.38.227:8080/auth";
 //        auth += "&redirect_uri=" + "http://localhost:8080/auth";
         auth += "&response_type=" + "code";
         return "redirect:" + auth;
@@ -54,7 +54,7 @@ public class UserController {
         String strToken = tokenUri;
         strToken += "?grant_type=" + "authorization_code";
         strToken += "&client_id=" + clientId;
-        strToken += "&redirect_uri=" + "http://15.165.237.166:8080/auth";
+        strToken += "&redirect_uri=" + "http://221.168.38.227:8080/auth";
 //        strToken += "&redirect_uri=" + "http://localhost:8080/auth";
         strToken += "&code=" + code;
 
