@@ -1,7 +1,6 @@
 package com.lucky.finpay.controller;
 
 import com.lucky.finpay.dto.SessionUser;
-import com.lucky.finpay.entity.User;
 import com.lucky.finpay.service.KakaoOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ResolvableType;
@@ -17,17 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 public class MainController {
-    private final HttpSession httpSession;
     private final KakaoOAuth2UserService kakaoOAuth2UserService;
+    private final HttpSession httpSession;
 
     private static final String authorizationRequestBaseUri = "oauth2/authorization";
-    Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
     private final ClientRegistrationRepository clientRegistrationRepository;
 
     @GetMapping("/")
@@ -47,7 +43,7 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String getLoginPage(Model model) throws Exception {
+    public String getLoginPage(Model model) {
         Iterable<ClientRegistration> clientRegistrations = null;
         ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository)
                 .as(Iterable.class);
