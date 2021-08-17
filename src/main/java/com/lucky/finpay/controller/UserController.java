@@ -103,7 +103,6 @@ public class UserController {
 
             StringBuilder sb = new StringBuilder();
             if (con2.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                System.out.println("test");
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(con2.getInputStream(), "utf-8"));
                 String line;
