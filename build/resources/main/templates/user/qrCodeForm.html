@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
 	<csrf disabled="true" />
 	<meta charset="UTF-8">
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" />
@@ -27,8 +27,8 @@
                 contentType : false,
                 processData : false,
                 success: function (data) {
+					console.log(data);
                     result = data[0]["symbol"][0]["data"];
-                    alert(result);
                     var form = document.createElement("form");
                     form.action = '/user/qrCode?payLink=' + result;
                     form.method = "post";
