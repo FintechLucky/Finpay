@@ -11,11 +11,15 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class MainController {
     private static final String authorizationRequestBaseUri = "oauth2/authorization";
     private final ClientRegistrationRepository clientRegistrationRepository;
 
+    @CrossOrigin
     @GetMapping("/")
     public String login(Model model) {
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
@@ -42,8 +47,11 @@ public class MainController {
         return "redirect:/login";
     }
 
+    @CrossOrigin
+    @ResponseBody
     @GetMapping("/login")
-    public String getLoginPage(Model model) {
+    public Map<String,String> getLoginPage() {
+        Map<String, String> result = new HashMap<>();
         Iterable<ClientRegistration> clientRegistrations = null;
         ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository)
                 .as(Iterable.class);
@@ -53,12 +61,12 @@ public class MainController {
         }
         assert clientRegistrations != null;
         clientRegistrations.forEach(registration -> {
-            model.addAttribute("url", authorizationRequestBaseUri + "/" + registration.getRegistrationId());
-            model.addAttribute("oAuth2", registration.getClientName());
+            result.put("url", authorizationRequestBaseUri + "/" + registration.getRegistrationId());
         });
-        return "user/login";
+        return result;
     }
 
+    @CrossOrigin
     @GetMapping(value = "/user/logout.do")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
