@@ -58,4 +58,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * 사용자 가 모임에서 나가는 기능
+     */
+
 }
